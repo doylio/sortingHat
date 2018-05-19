@@ -1,3 +1,12 @@
 body {
   background-image: linear-gradient(to right, #250137, #33005c, #3c0085, #3900b3, #1400e5);
 }
+
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+}

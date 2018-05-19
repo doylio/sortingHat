@@ -1,0 +1,42 @@
+#menu {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 750px;
+}
+
+#menu-options {
+	position: absolute;
+	top: 280px;
+	right: 50%;
+	z-index: 1;
+	color: white;
+	text-align: center;
+}
+
+#menu-options div {
+	position: relative;
+	right: -50%;
+}
+
+#menu-btn {
+	margin: 50px;
+	width: 200px;
+	border-radius: 10px;
+}
+
+#menu-btn:hover {
+	cursor: pointer;
+}
+
+#menu-btn, input {
+	background: #e2bf3d;
+	border: none;
+	padding: 5px;
+}
+
+h2, p {
+	color: #e2bf3d;
+}
