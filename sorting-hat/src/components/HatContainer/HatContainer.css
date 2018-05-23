@@ -6,36 +6,18 @@
 	flex-wrap: wrap;
 }
 
-h3 {
-	margin: 20px;
+.custom-modal {
+	background: black;
 	color: #e2bf3d;
-	font-family: Helvetica, Arial, Times, sans-serif;
-	font-size: 1.5em;
-}
-
-#sort-select {
-	display: flex;
-}
-
-select {
-	margin: 20px;
-	max-height: 30px;
-	background: #e2bf3d;
-	border: none;
-	border-radius: 5px;
-	padding: 5px;
-}
-
-#sort-btn {
-	margin-bottom: 20px;
-	margin-left: 30px;
-	background: #e2bf3d;
-	border: none;
-	padding: 5px;
-	width: 200px;
+	border: 1px solid #e2bf3d;
 	border-radius: 10px;
+	padding: 20px;
 }
 
-#sort-btn:hover {
-	cursor: pointer;
+.custom-modal p {
+	color: #e2bf3d;
+}
+
+.modal-close-button {
+	fill: #e2bf3d;
 }

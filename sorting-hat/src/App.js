@@ -3,8 +3,6 @@ import Particles from 'react-particles-js';
 import './App.css';
 import Menu from './components/Menu/Menu';
 import HatContainer from './components/HatContainer/HatContainer';
-import Hat from './components/Hat/Hat';
-import 'tachyons';
 
 
 const particleOptions = {
@@ -36,7 +34,7 @@ class App extends Component {
     super();
     this.state = {
       route: 'sorting',
-      numberOfHats: 10,
+      numberOfHats: 200,
       sortingMethod: 'bubble'
     }
   }
@@ -55,7 +53,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.numberOfHats);
     return (
       <div className="App">
         <Particles className='particles' params={particleOptions} />

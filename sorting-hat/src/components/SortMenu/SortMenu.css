@@ -1,0 +1,33 @@
+h3 {
+	margin: 20px;
+	color: #e2bf3d;
+	font-family: Helvetica, Arial, Times, sans-serif;
+	font-size: 1.5em;
+}
+
+#sort-select {
+	display: flex;
+}
+
+select {
+	margin: 20px;
+	max-height: 30px;
+	background: #e2bf3d;
+	border: none;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+#sort-btn {
+	margin-bottom: 20px;
+	margin-left: 30px;
+	background: #e2bf3d;
+	border: none;
+	padding: 5px;
+	width: 200px;
+	border-radius: 10px;
+}
+
+#sort-btn:hover {
+	cursor: pointer;
+}
