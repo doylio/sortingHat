@@ -11,8 +11,11 @@ class HatContainer extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			sortingMethod: '',
+			sortingMethod: '-',
+			numberOfHats: 10,
+			delay: 0,
 			hatArray: [],
+			sorting: false,
 			sorted: false,
 			startTime: undefined,
 			endTime: undefined,
@@ -20,8 +23,8 @@ class HatContainer extends React.Component {
 
 	}
 
-	sleep = (ms = 10) => {
-		return new Promise(resolve => setTimeout(resolve, ms));
+	sleep = () => {
+		return new Promise(resolve => setTimeout(resolve, this.state.delay));
 	}
 
 	async bubbleSort() {
@@ -38,19 +41,36 @@ class HatContainer extends React.Component {
 	                swapped = true;
 	            	this.setState({hatArray: list});
 	            }
-	            await this.sleep(1);
+	            await this.sleep();
 	        }
 	        len--;
 	    } while (swapped)
+	    console.log('line 52');
 	    this.setState({
 	    	sorted: true,
 	    	endTime: new Date().getTime(),
+	    	sorting: false,
 	    });
 	}
 
 	async mergeSort() {
 		let list = this.state.hatArray;
-				
+		
+
+
+		function mergeSplit(arr, l, r) {
+			if(l < r) {
+				let m = Math.floor((l + r - 1) / 2);
+				mergeSplit(arr, l, m);
+				mergeSplit(arr, m + 1, r);
+
+				merge(arr, l, m, r);
+			}
+		}
+		function merge(arr, l, m, r) {
+			let A, B = [];
+			//TODO
+		}
 
 	}
 
@@ -72,6 +92,7 @@ class HatContainer extends React.Component {
 		this.setState({
 			sorted: true,
 			endTime: new Date().getTime(),
+			sorting: false,
 		});
 	}
 
@@ -97,26 +118,61 @@ class HatContainer extends React.Component {
 	
 	}
 
+	setDelay = (event) => {
+		this.setState({delay: event.target.value});
+	}
+
+	updateHatArray = () => {
+		let hatArray = [];
+		for(let i = 0; i < this.state.numberOfHats; i++) {
+			hatArray.push(
+				<Hat width={100} height={100} number={Math.random()} />
+			);
+		}
+		this.setState({hatArray: hatArray});
+	}
+
+	onHatInputChange = (event) => {
+    	this.setState({
+    		numberOfHats: event.target.value
+    	});
+	}
+
 	onOptionSelect = (event) => {
 		this.setState({sortingMethod: event.target.value});
-		console.log(this.state.sortingMethod);
 	}
 
 	onSortBtn = () => {
-		if(this.state.sortingMethod === '-') {
-			return;
-		}
-	
-		this.setState({startTime: new Date().getTime()});
+		if(!this.state.sorting) {
+			
+			if(this.state.sortingMethod === '-') {
+				return;
+			}
 
-		if(this.state.sortingMethod === 'Bubble Sort') {
-			this.bubbleSort();
-		} else if(this.state.sortingMethod === 'Merge Sort') {
-			this.mergeSort();
-		} else if(this.state.sortingMethod === 'Selection Sort') {
-			this.selectionSort();
-		} else if(this.state.sortingMethod === 'Insertion Sort') {
-			this.insertionSort();
+			this.setState({
+				sorting: true,
+				startTime: new Date().getTime(),
+			});
+			
+			switch(this.state.sortingMethod) {
+				case 'Bubble Sort':
+					this.bubbleSort();
+					break;
+				case 'Merge Sort':
+					this.mergeSort();
+					break;
+				case 'Selection Sort':
+					this.selectionSort();
+					break;
+				case 'Insertion Sort':
+					this.insertionSort();
+					break;
+				default:
+					break;
+			}
+		} else {
+			console.log('line 163')
+			this.setState({sorting: false});
 		}
 	}
 
@@ -125,11 +181,18 @@ class HatContainer extends React.Component {
 	}
 
 	render() {
-		let {sorted, hatArray, sortingMethod, startTime, endTime} = this.state;
-
+		let {sorted, hatArray, sortingMethod, startTime, endTime, numberOfHats, sorting} = this.state;
+		console.log(this.state.sorting);
 		return (
 			<div>
-				<SortMenu onOptionSelect={this.onOptionSelect} onSortBtn={this.onSortBtn} />
+				<SortMenu 
+					onOptionSelect={this.onOptionSelect} 
+					onSortBtn={this.onSortBtn} 
+					onHatInputChange={this.onHatInputChange}
+					updateHatArray={this.updateHatArray}
+					setDelay={this.setDelay}
+					sorting={sorting}
+				/>
 				<Modal 
 					open={sorted} 
 					onClose={this.onCloseModal} 
@@ -140,7 +203,7 @@ class HatContainer extends React.Component {
 					center 
 				>
 					<h1>Sorting Complete!</h1>
-					<p>{`${sortingMethod} sorted ${this.props.hats} hats in ${(endTime - startTime) / 1000} seconds.`}</p>
+					<p>{`${sortingMethod} sorted ${numberOfHats} hats in ${(endTime - startTime) / 1000} seconds.`}</p>
 				</Modal>
 				<div id="hat-box">
 					{hatArray}
@@ -151,7 +214,7 @@ class HatContainer extends React.Component {
 
 	componentDidMount() {
 		let hatArray = [];
-		for(let i = 0; i < this.props.hats; i++) {
+		for(let i = 0; i < this.state.numberOfHats; i++) {
 			hatArray.push(
 				<Hat width={100} height={100} number={Math.random()} />
 			);

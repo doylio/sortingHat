@@ -10,11 +10,7 @@ const Menu = ({onHatInputChange, onMenuButtonClick}) => {
 			<div id="menu-options">
 				<div>
 					<h2>Welcome to<br/> the Sorting Hat</h2>
-					<br/>
-					<p># of Hats</p>
-					<p>(10-500)</p>
-					<input type='number' min='10' max='500' onChange={onHatInputChange} />
-					<br/>
+					
 					<button id="menu-btn" onClick={onMenuButtonClick}>Continue</button>
 				</div>
 			</div>

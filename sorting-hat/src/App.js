@@ -34,17 +34,10 @@ class App extends Component {
     super();
     this.state = {
       route: 'sorting',
-      numberOfHats: 200,
-      sortingMethod: 'bubble'
     }
   }
 
-  onHatInputChange = (event) => {
-  //  console.log(event.target.value);
-    this.setState({
-      numberOfHats: event.target.value
-    });
-  }
+
 
   onMenuButtonClick = () => {
     this.setState({
@@ -58,7 +51,7 @@ class App extends Component {
         <Particles className='particles' params={particleOptions} />
         {
           this.state.route === 'menu'
-          ? <Menu onHatInputChange={this.onHatInputChange} onMenuButtonClick={this.onMenuButtonClick}/>
+          ? <Menu onMenuButtonClick={this.onMenuButtonClick}/>
           : <HatContainer hats={this.state.numberOfHats} />
         }
       </div>
