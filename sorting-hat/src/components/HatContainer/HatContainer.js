@@ -23,8 +23,8 @@ class HatContainer extends React.Component {
 
 	}
 
-	sleep = () => {
-		return new Promise(resolve => setTimeout(resolve, this.state.delay));
+	sleep = (ms = this.state.delay) => {
+		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
 	async bubbleSort() {
@@ -53,8 +53,9 @@ class HatContainer extends React.Component {
 	}
 
 	mergeWrap() {
-		this.mergeSort(0, this.state.hatArray.length - 1);
+		let sorted = this.mergeSort(this.state.hatArray);
 		this.setState({
+			hatArray: sorted,
 	    	sorted: true,
 	    	endTime: new Date().getTime(),
 	    	sorting: false,
@@ -62,46 +63,39 @@ class HatContainer extends React.Component {
 	}
 
 
-	mergeSort(l, r) {
-		if(l < r) {
-			const m = Math.floor((l + r) / 2);
-			this.mergeSort(l, m);
-			this.mergeSort(m + 1, r);
-
-			this.merge(l, m, r);
+	mergeSort(arr) {
+		if(arr.length < 2) {
+			return arr;
 		}
+		const m = Math.floor(arr.length / 2);
+		let left = arr.slice(0, m);
+		let right = arr.slice(m);
+
+		return this.merge(this.mergeSort(left), this.mergeSort(right));
+		
+		
 	}
 
-	merge(l, m, r) {
-		let leftPtr = l;
-		let rightPtr = m + 1;
-		let arrPtr = l;
-		let {hatArray} = this.state;
-		let result = hatArray;
+	merge(left, right) {
+		let result = [];
 
-		while(leftPtr <= m && rightPtr <= r) {
-			if(hatArray[leftPtr].props.number <= hatArray[rightPtr].props.number) {
-				result[arrPtr] = hatArray[leftPtr];
-				leftPtr++;
+		while(left.length && right.length) {
+			if(left[0].props.number <= right[0].props.number) {
+				result.push(left.shift());
 			} else {
-				result[arrPtr] = hatArray[rightPtr];
-				rightPtr++;
+				result.push(right.shift());
 			}
-			arrPtr++;
 		}
 
-		while(leftPtr <= m) {
-			result[arrPtr] = hatArray[leftPtr];
-			leftPtr++;
-			arrPtr++;
+		while(left.length) {
+			result.push(left.shift());
 		}
 
-		while(rightPtr <= r) {
-			result[arrPtr] = hatArray[rightPtr];
-			rightPtr++;
-			arrPtr++;
+		while(right.length) {
+			result.push(right.shift());
 		}
-		this.setState({hatArray: result});
+
+		return result;
 	}
 
 	async selectionSort() {
