@@ -45,7 +45,6 @@ class HatContainer extends React.Component {
 	        }
 	        len--;
 	    } while (swapped)
-	    console.log('line 52');
 	    this.setState({
 	    	sorted: true,
 	    	endTime: new Date().getTime(),
@@ -53,25 +52,56 @@ class HatContainer extends React.Component {
 	    });
 	}
 
-	async mergeSort() {
-		let list = this.state.hatArray;
-		
+	mergeWrap() {
+		this.mergeSort(0, this.state.hatArray.length - 1);
+		this.setState({
+	    	sorted: true,
+	    	endTime: new Date().getTime(),
+	    	sorting: false,
+	    });
+	}
 
 
-		function mergeSplit(arr, l, r) {
-			if(l < r) {
-				let m = Math.floor((l + r - 1) / 2);
-				mergeSplit(arr, l, m);
-				mergeSplit(arr, m + 1, r);
+	mergeSort(l, r) {
+		if(l < r) {
+			const m = Math.floor((l + r) / 2);
+			this.mergeSort(l, m);
+			this.mergeSort(m + 1, r);
 
-				merge(arr, l, m, r);
+			this.merge(l, m, r);
+		}
+	}
+
+	merge(l, m, r) {
+		let leftPtr = l;
+		let rightPtr = m + 1;
+		let arrPtr = l;
+		let {hatArray} = this.state;
+		let result = hatArray;
+
+		while(leftPtr <= m && rightPtr <= r) {
+			if(hatArray[leftPtr].props.number <= hatArray[rightPtr].props.number) {
+				result[arrPtr] = hatArray[leftPtr];
+				leftPtr++;
+			} else {
+				result[arrPtr] = hatArray[rightPtr];
+				rightPtr++;
 			}
-		}
-		function merge(arr, l, m, r) {
-			let A, B = [];
-			//TODO
+			arrPtr++;
 		}
 
+		while(leftPtr <= m) {
+			result[arrPtr] = hatArray[leftPtr];
+			leftPtr++;
+			arrPtr++;
+		}
+
+		while(rightPtr <= r) {
+			result[arrPtr] = hatArray[rightPtr];
+			rightPtr++;
+			arrPtr++;
+		}
+		this.setState({hatArray: result});
 	}
 
 	async selectionSort() {
@@ -159,7 +189,7 @@ class HatContainer extends React.Component {
 					this.bubbleSort();
 					break;
 				case 'Merge Sort':
-					this.mergeSort();
+					this.mergeWrap();
 					break;
 				case 'Selection Sort':
 					this.selectionSort();
