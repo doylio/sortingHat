@@ -46,6 +46,7 @@ class Hat extends React.Component {
 		let context = canvas.getContext('2d');
 		//Hat Base shape
 		drawEllipse(cWidth * 0.5, cHeight * 0.7, cWidth * 0.9, cHeight * 0.14);
+		context.stroke();
 		let { r, g, b } = this.HSVtoRGB(number, 1.0, 0.5);
 		context.fillStyle = `rgb(${r}, ${g}, ${b})`;
 		context.fill();

@@ -6,7 +6,6 @@ import Modal from 'react-responsive-modal';
 
 
 
-
 class HatContainer extends React.Component {
 	constructor() {
 		super();
@@ -22,6 +21,8 @@ class HatContainer extends React.Component {
 		};
 
 	}
+
+	globalHatArray = [];
 
 	sleep = (ms = this.state.delay) => {
 		return new Promise(resolve => setTimeout(resolve, ms));
@@ -52,10 +53,10 @@ class HatContainer extends React.Component {
 	    });
 	}
 
-	mergeWrap() {
-		let sorted = this.mergeSort(this.state.hatArray);
+	async mergeWrap() {
+		this.globalHatArray = this.state.hatArray;
+		await this.mergeSort(0, this.globalHatArray.length - 1);
 		this.setState({
-			hatArray: sorted,
 	    	sorted: true,
 	    	endTime: new Date().getTime(),
 	    	sorting: false,
@@ -63,39 +64,40 @@ class HatContainer extends React.Component {
 	}
 
 
-	mergeSort(arr) {
-		if(arr.length < 2) {
-			return arr;
+	async mergeSort(l, r) {
+		if(l < r) {
+			console.log(l);
+			const m = Math.floor((l + r) / 2);
+			this.mergeSort(l, m);
+			this.mergeSort(m + 1, r);
+			await this.sleep((r - l) * this.state.delay);
+			this.merge(l, m, r);	
 		}
-		const m = Math.floor(arr.length / 2);
-		let left = arr.slice(0, m);
-		let right = arr.slice(m);
-
-		return this.merge(this.mergeSort(left), this.mergeSort(right));
-		
-		
 	}
 
-	merge(left, right) {
-		let result = [];
-
+	merge(l, m, r) {
+		let left = this.globalHatArray.slice(l, m + 1);
+		let right = this.globalHatArray.slice(m + 1, r + 1);
+		let ptr = l;
 		while(left.length && right.length) {
 			if(left[0].props.number <= right[0].props.number) {
-				result.push(left.shift());
+				this.globalHatArray[ptr] = left.shift();
 			} else {
-				result.push(right.shift());
+				this.globalHatArray[ptr] = right.shift();
 			}
+			ptr++;
 		}
 
 		while(left.length) {
-			result.push(left.shift());
+			this.globalHatArray[ptr] = left.shift();
+			ptr++;
 		}
 
 		while(right.length) {
-			result.push(right.shift());
+			this.globalHatArray[ptr] = right.shift();
+			ptr++;
 		}
-
-		return result;
+		this.setState({hatArray: this.globalHatArray});
 	}
 
 	async selectionSort() {
@@ -205,7 +207,7 @@ class HatContainer extends React.Component {
 	}
 
 	render() {
-		let {sorted, hatArray, sortingMethod, startTime, endTime, numberOfHats, sorting} = this.state;
+		let {sorted, hatArray, sortingMethod, startTime, endTime, numberOfHats, sorting, delay} = this.state;
 		console.log(this.state.sorting);
 		return (
 			<div>
@@ -227,7 +229,7 @@ class HatContainer extends React.Component {
 					center 
 				>
 					<h1>Sorting Complete!</h1>
-					<p>{`${sortingMethod} sorted ${numberOfHats} hats in ${(endTime - startTime) / 1000} seconds.`}</p>
+					<p>{`${sortingMethod} sorted ${numberOfHats} hats in ${(endTime - startTime) / 1000} seconds with a delay time of ${delay} milliseconds.`}</p>
 				</Modal>
 				<div id="hat-box">
 					{hatArray}
