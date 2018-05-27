@@ -52,7 +52,7 @@ class App extends Component {
         {
           this.state.route === 'menu'
           ? <Menu onMenuButtonClick={this.onMenuButtonClick}/>
-          : <HatContainer hats={this.state.numberOfHats} />
+          : <HatContainer />
         }
       </div>
     );

@@ -29,6 +29,7 @@ class HatContainer extends React.Component {
 	}
 
 	async bubbleSort() {
+		console.log("bubble");
 		let list = this.state.hatArray;
 		let len = list.length;
 		let swapped;
@@ -40,8 +41,11 @@ class HatContainer extends React.Component {
 	                list[i - 1] = list[i];
 	                list[i] = temp;
 	                swapped = true;
-	            	this.setState({hatArray: list});
 	            }
+	            if(!this.state.sorting) {
+					return;
+				}
+				this.setState({hatArray: list});
 	            await this.sleep();
 	        }
 	        len--;
@@ -56,6 +60,9 @@ class HatContainer extends React.Component {
 	async mergeWrap() {
 		this.globalHatArray = this.state.hatArray;
 		await this.mergeSort(0, this.globalHatArray.length - 1);
+		if(!this.state.sorting) {
+			return;
+		}
 		this.setState({
 	    	sorted: true,
 	    	endTime: new Date().getTime(),
@@ -66,11 +73,13 @@ class HatContainer extends React.Component {
 
 	async mergeSort(l, r) {
 		if(l < r) {
-			console.log(l);
 			const m = Math.floor((l + r) / 2);
 			this.mergeSort(l, m);
 			this.mergeSort(m + 1, r);
 			await this.sleep((r - l) * this.state.delay);
+			if(!this.state.sorting) {
+				return;
+			}
 			this.merge(l, m, r);	
 		}
 	}
@@ -79,6 +88,9 @@ class HatContainer extends React.Component {
 		let left = this.globalHatArray.slice(l, m + 1);
 		let right = this.globalHatArray.slice(m + 1, r + 1);
 		let ptr = l;
+		if(!this.state.sorting) {
+			return;
+		}
 		while(left.length && right.length) {
 			if(left[0].props.number <= right[0].props.number) {
 				this.globalHatArray[ptr] = left.shift();
@@ -108,6 +120,9 @@ class HatContainer extends React.Component {
 				if(list[j].props.number < list[min].props.number) {
 					min = j;
 				}
+				if(!this.state.sorting) {
+					return;
+				}
 				await this.sleep();
 			}
 			let temp = list[i];
@@ -132,6 +147,9 @@ class HatContainer extends React.Component {
 					list[j - 1] = temp;
 				} else {
 					break;
+				}
+				if(!this.state.sorting) {
+					return;
 				}
 				this.setState({hatArray: list});
 				await this.sleep();
@@ -178,26 +196,25 @@ class HatContainer extends React.Component {
 			this.setState({
 				sorting: true,
 				startTime: new Date().getTime(),
+			}, function() {
+				switch(this.state.sortingMethod) {
+					case 'Bubble Sort':
+						this.bubbleSort();
+						break;
+					case 'Merge Sort':
+						this.mergeWrap();
+						break;
+					case 'Selection Sort':
+						this.selectionSort();
+						break;
+					case 'Insertion Sort':
+						this.insertionSort();
+						break;
+					default:
+						break;
+				}
 			});
-			
-			switch(this.state.sortingMethod) {
-				case 'Bubble Sort':
-					this.bubbleSort();
-					break;
-				case 'Merge Sort':
-					this.mergeWrap();
-					break;
-				case 'Selection Sort':
-					this.selectionSort();
-					break;
-				case 'Insertion Sort':
-					this.insertionSort();
-					break;
-				default:
-					break;
-			}
 		} else {
-			console.log('line 163')
 			this.setState({sorting: false});
 		}
 	}
@@ -208,7 +225,6 @@ class HatContainer extends React.Component {
 
 	render() {
 		let {sorted, hatArray, sortingMethod, startTime, endTime, numberOfHats, sorting, delay} = this.state;
-		console.log(this.state.sorting);
 		return (
 			<div>
 				<SortMenu 
