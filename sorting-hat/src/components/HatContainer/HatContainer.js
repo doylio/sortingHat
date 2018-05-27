@@ -28,6 +28,15 @@ class HatContainer extends React.Component {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
+	callbackSleep(callBack, ms = this.state.delay) {
+		return new Promise(resolve => {
+			setTimeout(() => {
+				callBack();
+				resolve();
+			}, ms);
+		});
+	}
+
 	async bubbleSort() {
 		console.log("bubble");
 		let list = this.state.hatArray;
@@ -98,18 +107,20 @@ class HatContainer extends React.Component {
 				this.globalHatArray[ptr] = right.shift();
 			}
 			ptr++;
+			this.setState({hatArray: this.globalHatArray});
 		}
 
 		while(left.length) {
 			this.globalHatArray[ptr] = left.shift();
 			ptr++;
+			this.setState({hatArray: this.globalHatArray});
 		}
 
 		while(right.length) {
 			this.globalHatArray[ptr] = right.shift();
 			ptr++;
+			this.setState({hatArray: this.globalHatArray});
 		}
-		this.setState({hatArray: this.globalHatArray});
 	}
 
 	async selectionSort() {
@@ -162,6 +173,46 @@ class HatContainer extends React.Component {
 	
 	}
 
+	async quickWrap() {
+		this.globalHatArray = this.state.hatArray;
+		await this.quickSort(0, this.globalHatArray.length - 1);
+		if(!this.state.sorting) {
+			return;
+		}
+		this.setState({
+	    	sorted: true,
+	    	endTime: new Date().getTime(),
+	    	sorting: false,
+	    });
+
+	}
+
+	quickSort(lo, hi) {
+		if (lo < hi) {
+			let p = this.partition(lo, hi);
+			this.quickSort(lo, p - 1);
+			this.quickSort(p + 1, hi);
+		}
+	}
+
+	partition(lo, hi) {
+		let pivot = this.globalHatArray[hi];
+		let i = lo - 1;
+		for(let j = lo; j < hi; j++) {
+			if(this.globalHatArray[j].props.number < pivot.props.number) {
+				i++;
+				let temp = this.globalHatArray[j];
+				this.globalHatArray[j] = this.globalHatArray[i];
+				this.globalHatArray[i] = temp;
+			}
+		}
+		let temp = this.globalHatArray[i + 1];
+		this.globalHatArray[i + 1] = this.globalHatArray[hi];
+		this.globalHatArray[hi] = temp;
+		this.setState({hatArray: this.globalHatArray});
+		return i + 1;
+	}
+
 	setDelay = (event) => {
 		this.setState({delay: event.target.value});
 	}
@@ -209,6 +260,9 @@ class HatContainer extends React.Component {
 						break;
 					case 'Insertion Sort':
 						this.insertionSort();
+						break;
+					case 'Quick Sort':
+						this.quickWrap();
 						break;
 					default:
 						break;

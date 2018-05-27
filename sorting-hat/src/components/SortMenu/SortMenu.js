@@ -14,6 +14,7 @@ const SortMenu = ({onOptionSelect, onSortBtn, onHatInputChange, updateHatArray, 
 						<option>Bubble Sort</option>
 						<option>Insertion Sort</option>
 						<option>Merge Sort</option>
+						<option>Quick Sort</option>
 					</select>
 				</span>
 				<span>
