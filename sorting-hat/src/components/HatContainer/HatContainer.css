@@ -1,8 +1,10 @@
 #hat-box {
-	border: 1px solid #e2bf3d;
+/*	border: 1px solid #e2bf3d;
 	border-radius: 10px;
 	max-width: 100%;
 	margin: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+*/
 	display: flex;
 	flex-wrap: wrap;
 }
@@ -16,6 +18,7 @@
 }
 
 .custom-modal p {
+	margin-top: 15px;
 	color: #e2bf3d;
 }
 

@@ -1,19 +1,24 @@
-h3 {
-	margin: 20px;
+#sort-menu {
+	border: 1px solid #e2bf3d;
+	border-radius: 10px;
+	max-width: 100%;
+	margin: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+h3, label {
 	color: #e2bf3d;
 	font-family: Helvetica, Arial, Times, sans-serif;
+}
+
+h3 {
+	margin: 20px;
 	font-size: 1.5em;
 }
 
-#sort-select {
-	display: flex;
-	flex-wrap: wrap;
-}
-
-#sort-select span {
-	display: flex;
-	flex-wrap: nowrap;
-}
 
 select, input {
 	margin: 20px;
@@ -29,22 +34,26 @@ input {
 }
 
 #sort-btn {
+	margin-top: 20px;
 	margin-bottom: 20px;
-	margin-left: 30px;
+	margin-left: 20px;
 	width: 200px;
+	border-radius: 10px;
 }
 
-#hat-button {
-	margin: 20px 0;
-	width: 50px;
-}
 
 #sort-btn, #hat-button {
 	background: #e2bf3d;
 	border: none;
-	padding: 5px;
-	border-radius: 10px;
 }
+
+#hat-button {
+	margin-left: -10px;
+	border-radius: 5px;
+	border-left: 1px solid black;
+	width: 50px;
+}
+
 
 #sort-btn, #hat-button:hover {
 	cursor: pointer;

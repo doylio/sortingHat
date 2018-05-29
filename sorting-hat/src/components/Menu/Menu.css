@@ -31,7 +31,7 @@
 	cursor: pointer;
 }
 
-#menu-btn, input {
+#menu-btn {
 	background: #e2bf3d;
 	border: none;
 	padding: 5px;
