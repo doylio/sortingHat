@@ -19,6 +19,7 @@ class HatContainer extends React.Component {
 			startTime: undefined,
 			endTime: undefined,
 			turboMode: false,
+			hatSize: 100,
 		};
 
 	}
@@ -397,7 +398,7 @@ class HatContainer extends React.Component {
 		let hatArray = [];
 		for(let i = 0; i < this.state.numberOfHats; i++) {
 			hatArray.push(
-				<Hat width={100} height={100} number={Math.random()} />
+				<Hat width={this.state.hatSize} height={this.state.hatSize} number={Math.random()} />
 			);
 		}
 		this.setState({hatArray: hatArray});
@@ -415,6 +416,10 @@ class HatContainer extends React.Component {
 
 	onOptionSelect = (event) => {
 		this.setState({sortingMethod: event.target.value});
+	}
+
+	onHatSizeChange = (value) => {
+		this.setState({hatSize: value});
 	}
 
 	onSortBtn = () => {
@@ -480,7 +485,7 @@ class HatContainer extends React.Component {
 	}
 
 	render() {
-		let {sorted, hatArray, sortingMethod, startTime, endTime, numberOfHats, sorting, delay, turboMode} = this.state;
+		let {sorted, hatArray, sortingMethod, startTime, endTime, numberOfHats, sorting, delay, turboMode, hatSize} = this.state;
 		return (
 			<div>
 				<SortMenu 
@@ -492,6 +497,9 @@ class HatContainer extends React.Component {
 					sorting={sorting}
 					onTurboModeChange={this.onTurboModeChange}
 					turboMode={turboMode}
+					sortingMethod={sortingMethod}
+					onHatSizeChange={this.onHatSizeChange}
+					hatSize={hatSize} 
 				/>
 				<Modal 
 					open={sorted} 
@@ -522,7 +530,7 @@ class HatContainer extends React.Component {
 		let hatArray = [];
 		for(let i = 0; i < this.state.numberOfHats; i++) {
 			hatArray.push(
-				<Hat width={100} height={100} number={Math.random()} />
+				<Hat width={this.state.hatSize} height={this.state.hatSize} number={Math.random()} />
 			);
 		}
 		this.setState({hatArray: hatArray});

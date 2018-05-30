@@ -5,10 +5,11 @@ import './Hat.css'
 class Hat extends React.Component {
 
 	render() {
+		const fontSize = this.props.width / 100;
 		return (
 			<div id={"d" + this.props.number}>
 				<canvas id={"c" + this.props.number} width={this.props.width} height={this.props.height} ></canvas>
-				<p>{
+				<p style={{fontSize: fontSize + "rem"}}>{
 					this.props.menu
 					? ""
 					: Math.floor(this.props.number * 10000)

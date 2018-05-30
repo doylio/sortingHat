@@ -1,13 +1,38 @@
 import React from 'react';
+import InputRange from 'react-input-range';
 import InfoBox from '../InfoBox/InfoBox';
 import './SortMenu.css';
 
-const SortMenu = ({onOptionSelect, onSortBtn, onHatInputChange, updateHatArray, setDelay, sorting, onTurboModeChange, turboMode}) => {
+const SortMenu = ({onOptionSelect, onSortBtn, onHatInputChange, updateHatArray, setDelay, sorting, onTurboModeChange, turboMode, sortingMethod, onHatSizeChange, hatSize}) => {
 
 	return (
 		<div className="container-fluid">
 			<div id="sort-menu" className="row">
 				<div id="sort-select" className="col-lg-6 col-md-12">
+					<div className="row" >
+						<div className="col-md-7 col-sm-12">
+							<h3>Set Number of Hats:</h3>
+						</div>
+						<div className="col-md-5 col-sm-12">
+							<input type='number' min='10' max='500' onChange={onHatInputChange} />
+							<button id="hat-button" onClick={updateHatArray}>Set</button>
+						</div>
+					</div>
+					<div className="row">
+						<div className="col-md-7 col-sm-12">
+							<h3>Select Hat Size:</h3>
+						</div>
+						<div className="col-md-5 col-sm-12">
+							<InputRange 
+								maxValue={500}
+								minValue={10}
+								step={10}
+								value={hatSize}
+								onChange={onHatSizeChange}
+							/>
+						</div>
+					</div>
+
 					<div className="row">
 						<div className="col-md-7 col-sm-12">
 							<h3>Select Sort Method:</h3>
@@ -21,15 +46,6 @@ const SortMenu = ({onOptionSelect, onSortBtn, onHatInputChange, updateHatArray, 
 								<option>Merge Sort</option>
 								<option>Quick Sort</option>
 							</select>
-						</div>
-					</div>
-					<div className="row" >
-						<div className="col-md-7 col-sm-12">
-							<h3>Set Number of Hats:</h3>
-						</div>
-						<div className="col-md-5 col-sm-12">
-							<input type='number' min='10' max='500' onChange={onHatInputChange} />
-							<button id="hat-button" onClick={updateHatArray}>Set</button>
 						</div>
 					</div>
 					<div className="row">
@@ -46,10 +62,15 @@ const SortMenu = ({onOptionSelect, onSortBtn, onHatInputChange, updateHatArray, 
 					</div>
 					<div>
 						<label><input type="checkbox" onChange={onTurboModeChange} />Turbo Mode</label>
+						{
+							turboMode
+							? <p className="turbo-message">Turbo mode removes all delays and optimizes the functions for speed!</p>
+							: null
+						}
 					</div>
 				</div>
 				<div className="col-lg-6 col-md-12 d-none d-md-block">
-					<InfoBox />
+					<InfoBox sortingMethod={sortingMethod} />
 				</div>
 				<button className="btn center" id="sort-btn" onClick={onSortBtn}>
 				{
