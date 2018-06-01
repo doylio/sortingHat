@@ -20,11 +20,14 @@ class HatContainer extends React.Component {
 			endTime: undefined,
 			turboMode: false,
 			hatSize: 100,
+			errorMessage: "",
+			warning: undefined,
 		};
 
 	}
 
 	globalHatArray = [];
+	heapArrayLength = undefined;
 
 	sleep = (ms = this.state.delay) => {
 		return new Promise(resolve => setTimeout(resolve, ms));
@@ -277,6 +280,7 @@ class HatContainer extends React.Component {
 		this.setState({
 			sorted: true,
 			endTime: new Date().getTime(),
+			sorting: false,
 		});
 	
 	}
@@ -301,6 +305,7 @@ class HatContainer extends React.Component {
 		this.setState({
 			sorted: true,
 			endTime: new Date().getTime(),
+			sorting: false,
 		});
 	
 	}
@@ -389,9 +394,132 @@ class HatContainer extends React.Component {
 		return i + 1;
 	}
 
+	heapifyTurbo(i) {
+		let left = 2 * i + 1;
+		let right = 2 * i + 2;
+		let max = i;
+
+		if(!this.state.sorting) {
+			return;
+		}
+
+		if(left < this.heapArrayLength && this.globalHatArray[left].props.number > this.globalHatArray[max].props.number) {
+			max = left;
+		}
+
+		if(right < this.heapArrayLength && this.globalHatArray[right].props.number > this.globalHatArray[max].props.number) {
+			max = right;
+		}
+
+		if(max !== i) {
+			let temp = this.globalHatArray[max];
+			this.globalHatArray[max] = this.globalHatArray[i];
+			this.globalHatArray[i] = temp;
+			this.heapifyTurbo(max);
+			this.setState({hatArray: this.globalHatArray});
+		}
+	}
+
+	heapSortTurbo() {
+		this.globalHatArray = this.state.hatArray;
+		this.heapArrayLength = this.globalHatArray.length;
+
+		for(let i = Math.floor(this.heapArrayLength / 2); i >= 0; i--) {
+			this.heapifyTurbo(i);
+		}
+
+		for(let j = this.globalHatArray.length - 1; j > 0; j--) {
+			let temp = this.globalHatArray[0];
+			this.globalHatArray[0] = this.globalHatArray[j];
+			this.globalHatArray[j] = temp;
+			this.heapArrayLength--;
+			this.heapifyTurbo(0);
+			this.setState({hatArray: this.globalHatArray});
+		}
+
+		if(!this.state.sorting) {
+			return;
+		}
+		this.setState({
+	    	sorted: true,
+	    	endTime: new Date().getTime(),
+	    	sorting: false,
+	    });
+	}	
+
+	async heapify(i) {
+		let left = 2 * i + 1;
+		let right = 2 * i + 2;
+		let max = i;
+
+		if(!this.state.sorting) {
+			return;
+		}
+
+		if(left < this.heapArrayLength && this.globalHatArray[left].props.number > this.globalHatArray[max].props.number) {
+			max = left;
+		}
+
+		if(right < this.heapArrayLength && this.globalHatArray[right].props.number > this.globalHatArray[max].props.number) {
+			max = right;
+		}
+
+		await this.sleep();
+
+		if(max !== i) {
+			let temp = this.globalHatArray[max];
+			this.globalHatArray[max] = this.globalHatArray[i];
+			this.globalHatArray[i] = temp;
+			this.setState({hatArray: this.globalHatArray});
+			await this.heapify(max);
+		}
+	}
+
+	async heapSort() {
+		this.globalHatArray = this.state.hatArray;
+		this.heapArrayLength = this.globalHatArray.length;
+
+		for(let i = Math.floor(this.heapArrayLength / 2); i >= 0; i--) {
+			await this.heapify(i);
+		}
+
+		for(let j = this.globalHatArray.length - 1; j > 0; j--) {
+			let temp = this.globalHatArray[0];
+			this.globalHatArray[0] = this.globalHatArray[j];
+			this.globalHatArray[j] = temp;
+			this.heapArrayLength--;
+			await this.heapify(0);
+			this.setState({hatArray: this.globalHatArray});
+		}
+
+		if(!this.state.sorting) {
+			return;
+		}
+		this.setState({
+	    	sorted: true,
+	    	endTime: new Date().getTime(),
+	    	sorting: false,
+	    });
+	}
+
 
 	setDelay = (event) => {
 		this.setState({delay: event.target.value});
+	}
+
+	setNumberOfHats = () => {
+		if(this.state.numberOfHats > 10000) {
+			this.setState({
+				errorMessage: "Input exceeds the maximum allowed hats (10 000)"
+			});
+		} else {
+			if(this.state.numberOfHats > 1000 && this.state.warning !== false) {
+				this.setState({
+					warning: true
+				});
+			}
+			this.updateHatArray();
+		}
 	}
 
 	updateHatArray = () => {
@@ -406,7 +534,7 @@ class HatContainer extends React.Component {
 
 	onHatInputChange = (event) => {
     	this.setState({
-    		numberOfHats: event.target.value
+   		numberOfHats: event.target.value
     	});
 	}
 
@@ -419,7 +547,7 @@ class HatContainer extends React.Component {
 	}
 
 	onHatSizeChange = (value) => {
-		this.setState({hatSize: value});
+		this.setState({hatSize: value}, this.updateHatArray);
 	}
 
 	onSortBtn = () => {
@@ -450,6 +578,9 @@ class HatContainer extends React.Component {
 						case 'Quick Sort':
 							this.quickWrapTurbo();
 							break;
+						case 'Heap Sort':
+							this.heapSortTurbo();
+							break;
 						default:
 							break;
 					}	
@@ -470,6 +601,9 @@ class HatContainer extends React.Component {
 						case 'Quick Sort':
 							this.quickWrap();
 							break;
+						case 'Heap Sort':
+							this.heapSort();
+							break;
 						default:
 							break;
 					}
@@ -484,15 +618,37 @@ class HatContainer extends React.Component {
 		this.setState({sorted: false});
 	}
 
+	onCloseError = () => {
+		this.setState({errorMessage: ""});
+	}
+
+	onCloseWarning = () => {
+		this.setState({warning: false});
+	}
+
 	render() {
-		let {sorted, hatArray, sortingMethod, startTime, endTime, numberOfHats, sorting, delay, turboMode, hatSize} = this.state;
+		let {
+			sorted, 
+			hatArray, 
+			sortingMethod, 
+			startTime, 
+			endTime, 
+			numberOfHats, 
+			sorting, 
+			delay, 
+			turboMode, 
+			hatSize, 
+			errorMessage, 
+			warning,
+		} = this.state;
+
 		return (
 			<div>
 				<SortMenu 
 					onOptionSelect={this.onOptionSelect} 
 					onSortBtn={this.onSortBtn} 
 					onHatInputChange={this.onHatInputChange}
-					updateHatArray={this.updateHatArray}
+					updateHatArray={this.setNumberOfHats}
 					setDelay={this.setDelay}
 					sorting={sorting}
 					onTurboModeChange={this.onTurboModeChange}
@@ -518,6 +674,30 @@ class HatContainer extends React.Component {
 							: `${sortingMethod} sorted ${numberOfHats} hats in ${(endTime - startTime) / 1000} seconds with a delay time of ${delay} milliseconds.`
 						}
 					</p>
+				</Modal>
+				<Modal
+					open={warning}
+					onClose={this.onCloseWarning}
+					classNames={{
+						modal: 'custom-modal',
+						closeIcon: 'modal-close-button'
+					}}
+					center 
+				>
+					<h1>Warning</h1>
+					<p>Trying to sort more than 1000 hats may crash your browser!</p>
+				</Modal>				
+				<Modal
+					open={Boolean(errorMessage)}
+					onClose={this.onCloseError}
+					classNames={{
+						modal: 'custom-modal',
+						closeIcon: 'modal-close-button'
+					}}
+					center 
+				>
+					<h1>Error</h1>
+					<p>{errorMessage}</p>
 				</Modal>
 				<div id="hat-box">
 					{hatArray}
