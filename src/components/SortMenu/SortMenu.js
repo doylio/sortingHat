@@ -27,8 +27,17 @@ const SortMenu = (props) => {
 							<h3>Set Number of Hats:</h3>
 						</div>
 						<div className="col-md-5 col-sm-12">
-							<input type='number' min='2' max='10000' onChange={onHatInputChange} />
-							<button id="hat-button" onClick={updateHatArray}>Set</button>
+							{
+								sorting ?
+								<div>
+									<input type='number' style={{backgroundColor: "#565650"}} disabled />
+									<button id="hat-button" style={{backgroundColor: "#565650"}} disabled >Set</button>
+								</div>
+								: <div>
+									<input type='number' min='2' max='10000' onChange={onHatInputChange} />
+									<button id="hat-button" onClick={updateHatArray}>Set</button>
+								</div>
+							}
 						</div>
 					</div>
 					<div className="row">
@@ -42,6 +51,7 @@ const SortMenu = (props) => {
 								step={10}
 								value={hatSize}
 								onChange={onHatSizeChange}
+								disabled={sorting}
 							/>
 						</div>
 					</div>
@@ -51,15 +61,19 @@ const SortMenu = (props) => {
 							<h3>Select Sort Method:</h3>
 						</div>
 						<div className="col-md-5 col-sm-12">
-							<select onChange={onOptionSelect}>
-								<option>-</option>
-								<option>Selection Sort</option>
-								<option>Bubble Sort</option>
-								<option>Insertion Sort</option>
-								<option>Merge Sort</option>
-								<option>Quick Sort</option>
-								<option>Heap Sort</option>
-							</select>
+							{
+								sorting ?
+								<select disabled style={{backgroundColor: "#565650", width: "100px"}}></select>
+								: <select onChange={onOptionSelect}>
+									<option>-</option>
+									<option>Selection Sort</option>
+									<option>Bubble Sort</option>
+									<option>Insertion Sort</option>
+									<option>Merge Sort</option>
+									<option>Quick Sort</option>
+									<option>Heap Sort</option>
+								</select>
+							}
 						</div>
 					</div>
 					<div className="row">
@@ -68,17 +82,24 @@ const SortMenu = (props) => {
 						</div>
 						<div className="col-md-5 col-sm-12">
 							{
-								turboMode
-								? <input disabled style={{backgroundColor: "#565650"}}/>
+								turboMode || sorting ?
+								<input disabled style={{backgroundColor: "#565650"}}/>
 								: <input type='number' onChange={setDelay}/>
 							}
 						</div>
 					</div>
 					<div>
-						<label><input type="checkbox" onChange={onTurboModeChange} />Turbo Mode</label>
+						<label>
+							{
+								sorting ?
+								<input type="checkbox" disabled />
+								: <input type="checkbox" onChange={onTurboModeChange} />
+							}
+							Turbo Mode
+						</label>
 						{
-							turboMode
-							? <p className="turbo-message">Turbo mode removes all delays and optimizes the functions for speed!</p>
+							turboMode ?
+							<p className="turbo-message">Turbo mode removes all delays and optimizes the functions for speed!</p>
 							: null
 						}
 					</div>

@@ -326,6 +326,9 @@ class HatContainer extends React.Component {
 	}
 
 	async quickSort(lo, hi) {
+		if(!this.state.sorting) {
+			return;
+		}
 		if (lo < hi) {
 			let p = await this.partition(lo, hi);
 			await this.quickSort(lo, p - 1);
@@ -334,6 +337,7 @@ class HatContainer extends React.Component {
 	}
 
 	async partition(lo, hi) {
+
 		let pivot = this.globalHatArray[hi];
 		let i = lo - 1;
 		for(let j = lo; j < hi; j++) {
@@ -343,6 +347,9 @@ class HatContainer extends React.Component {
 				this.globalHatArray[j] = this.globalHatArray[i];
 				this.globalHatArray[i] = temp;
 				this.setState({hatArray: this.globalHatArray});
+			}
+			if(!this.state.sorting) {
+				return;
 			}
 			await this.sleep();
 		}
@@ -368,6 +375,9 @@ class HatContainer extends React.Component {
 	}
 
 	quickSortTurbo(lo, hi) {
+		if(!this.state.sorting) {
+			return;
+		}
 		if (lo < hi) {
 			let p = this.partitionTurbo(lo, hi);
 			this.quickSortTurbo(lo, p - 1);
@@ -385,6 +395,9 @@ class HatContainer extends React.Component {
 				this.globalHatArray[j] = this.globalHatArray[i];
 				this.globalHatArray[i] = temp;
 				this.setState({hatArray: this.globalHatArray});
+			}
+			if(!this.state.sorting) {
+				return;
 			}
 		}
 		let temp = this.globalHatArray[i + 1];

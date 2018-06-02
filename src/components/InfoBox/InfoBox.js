@@ -16,14 +16,14 @@ const InfoBox = ({ sortingMethod }) => {
 		case 'Selection Sort':
 			text = 				
 				<p className="m-1 p-2 text-left">
-					Selection sort repeatedly scans the list for the nth lowest element, and then swaps it with the element in the nth position.  This makes it very easy to implement and explain, but incredibly inefficient, with a runtime of O(<em>n</em>&sup2;). It is only underperformed here by Bubble Sort.
+					Selection sort repeatedly scans the list for the nth lowest element, and then swaps it with the element in the nth position.  This makes it very easy to implement and explain, but incredibly inefficient, with a runtime of O(<em>n</em>&sup2;). It is only underperformed here by Bubble sort.
 				</p>
 			;
 			break;
 		case 'Insertion Sort':
 			text = 				
 				<p className="m-1 p-2 text-left">
-					Insertion sort is the best of the "slow algorithms".  Like Bubble sort and Selection Sort, it has a runtime of O(<em>n</em>&sup2;).  It creates a new list at the start of the array and adds elements to it, one by one, sorting them into their correct place in it's new list.  This makes it look like a sorted list is growing and that each new element is falling into its proper position.
+					Insertion sort is the best of the "slow algorithms".  Like Bubble sort and Selection Sort, it has a runtime of O(<em>n</em>&sup2;).  It creates a new list at the start of the array and adds elements to it, one by one, sorting them into their correct place in its new list.  This makes it look like a sorted list is growing and that each new element is falling into its proper position.
 				</p>
 			;
 			break;
