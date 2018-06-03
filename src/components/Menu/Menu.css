@@ -9,16 +9,16 @@
 
 #menu-options {
 	position: absolute;
-	top: 280px;
-	right: 50%;
+	top: 370px;
 	z-index: 1;
 	color: white;
 	text-align: center;
+	width: 750px;
 }
 
 #menu-options div {
 	position: relative;
-	right: -50%;
+	text-align: center;
 }
 
 #menu-btn {

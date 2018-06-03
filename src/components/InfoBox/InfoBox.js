@@ -37,7 +37,7 @@ const InfoBox = ({ sortingMethod }) => {
 		case 'Quick Sort': 
 			text = 				
 				<p className="m-1 p-2 text-left">
-					Quick sort is the fastest sorting algorithm shown here in most situations.  It has a theoretic runtime of O(<em>n</em>&sup2;), but in practice it acts like an algorithm with O(<em>n</em>log<em>n</em>) runtime.  It was invented by Sir Tony Hoare in 1959.  Like many fast algorithms, it uses a 'divide-and-conquer' strategy.  It chooses a 'pivot' value at random from the list, and then moves each element to its proper side relative to the pivot.  In this case, values greater than the pivot go on the left and less than the pivot on the right.  It repeats this process on each side of the pivot, working smaller and smaller until the list is sorted.
+					Quick sort is one of the fastest sorting algorithms in most situations.  It has a theoretic runtime of O(<em>n</em>&sup2;), but in practice it acts like an algorithm with O(<em>n</em>log<em>n</em>) runtime.  It was invented by Sir Tony Hoare in 1959.  Like many fast algorithms, it uses a 'divide-and-conquer' strategy.  It chooses a 'pivot' value at random from the list, and then moves each element to its proper side relative to the pivot.  In this case, values greater than the pivot go on the left and less than the pivot on the right.  It repeats this process on each side of the pivot, working smaller and smaller until the list is sorted.
 				</p>
 			;
 			break;
